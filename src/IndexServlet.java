@@ -1,3 +1,4 @@
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import javax.servlet.annotation.WebServlet;
@@ -28,6 +29,14 @@ public class IndexServlet extends HttpServlet {
         responseJsonObject.addProperty("sessionID", sessionId);
         responseJsonObject.addProperty("lastAccessTime", new Date(lastAccessTime).toString());
 
+        ArrayList<String> previousItems = (ArrayList<String>) session.getAttribute("previousItems");
+        if (previousItems == null) {
+            previousItems = new ArrayList<>();
+        }
+        JsonArray previousItemsJsonArray = new JsonArray();
+        previousItems.forEach(previousItemsJsonArray::add);
+        responseJsonObject.add("previousItems", previousItemsJsonArray);
+
         // write all the data into the jsonObject
         response.getWriter().write(responseJsonObject.toString());
     }
@@ -54,6 +63,12 @@ public class IndexServlet extends HttpServlet {
             }
         }
 
-        response.getWriter().write(String.join(",", previousItems));
+        JsonObject responseJsonObject = new JsonObject();
+
+        JsonArray previousItemsJsonArray = new JsonArray();
+        previousItems.forEach(previousItemsJsonArray::add);
+        responseJsonObject.add("previousItems", previousItemsJsonArray);
+
+        response.getWriter().write(responseJsonObject.toString());
     }
 }

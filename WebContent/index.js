@@ -14,14 +14,16 @@ function handleSessionData(resultDataString) {
     // show the session information 
     $("#sessionID").text("Session ID: " + resultDataJson["sessionID"]);
     $("#lastAccessTime").text("Last access time: " + resultDataJson["lastAccessTime"]);
+
+    // show cart information
+    handleCartArray(resultDataJson["previousItems"]);
 }
 
 /**
  * Handle the items in item list
- * @param resultDataString jsonObject, needs to be parsed to html
+ * @param resultArray jsonObject, needs to be parsed to html
  */
-function handleCartArray(resultDataString) {
-    const resultArray = resultDataString.split(",");
+function handleCartArray(resultArray) {
     console.log(resultArray);
     let item_list = $("#item_list");
     // change it to html list
@@ -53,8 +55,14 @@ function handleCartInfo(cartEvent) {
     $.ajax("api/index", {
         method: "POST",
         data: cart.serialize(),
-        success: handleCartArray
+        success: resultDataString => {
+            let resultDataJson = JSON.parse(resultDataString);
+            handleCartArray(resultDataJson["previousItems"]);
+        }
     });
+
+    // clear input form
+    cart[0].reset();
 }
 
 $.ajax("api/index", {
