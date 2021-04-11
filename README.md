@@ -16,7 +16,7 @@
 
 
 - `login.js` is responsible for submitting the form. 
-  - In line `39`, it sets up an event listener for the form `submit` action and binds the action to the `submitLoginForm` function. 
+  - The statement `login_form.submit(submitLoginForm)` sets up an event listener for the form `submit` action and binds the action to the `submitLoginForm` function. 
   - The `submitLoginForm` function disables the default form action and sends HTTP POST requests to the backend.
   - The `handleLoginResult` function parses the JSON data that is sent from the backend. If login is successful, `login.js` redirects to the `index.html` page. If login fails, it shows appropriate error messages.
 
